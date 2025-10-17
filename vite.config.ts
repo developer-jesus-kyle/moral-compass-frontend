@@ -1,20 +1,17 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  // Load env variables from .env file in the root directory.
-  const env = loadEnv(mode, process.cwd(), '');
-
-  return {
-    server: {
-      port: 3000
-    },
-    plugins: [react()],
-    define: {
-      // This explicitly replaces `import.meta.env.VITE_API_KEY` in your code
-      // with the value from your .env file.
-      'import.meta.env.VITE_API_KEY': JSON.stringify(env.VITE_API_KEY)
-    }
-  }
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173, // local dev server port
+    open: true, // auto open browser when running `npm run dev`
+  },
+  build: {
+    outDir: 'dist', // Vercel expects output here
+  },
+  define: {
+    'process.env': {}, // fixes "process is not defined" errors
+  },
 });
